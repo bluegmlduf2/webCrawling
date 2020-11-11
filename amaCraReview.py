@@ -1,7 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
- 
+import time
+
 #browser = webdriver.Chrome("C:\Users\YOON\Desktop\pythonProj\chromedriver_win32.exe")
 browser = webdriver.Chrome()
 
@@ -14,13 +15,30 @@ browser.get(url)
 
 liTag = browser.find_elements_by_css_selector('ul.a-pagination>li.a-selected')
 
-nextBtn = browser.find_elements_by_css_selector('ul.a-pagination>li.a-last')
+nextBtnList = browser.find_elements_by_css_selector('ul.a-pagination>li.a-last>a')
+if int(nextBtnList.len())>0:
+    nextBtnList[0].click()
+    while True:
+        browser.find_elements_by_css_selector('span.a-price-whole')
+        div_elems = browser.find_elements_by_xpath("//div[@data-asin]")
+        # if res.ok:
+        #     pageCnt+=1
+        # else:
+        #     break
 
+
+
+nextBtn.click()  # 클릭
+ 
+#import time
+# time.sleep(5) # 5초 대기
+# browser.quit() # 브라우저 종료
+time.sleep(5) # 5초 대기
 #ul.a-pagination>li.a-last
 # ul.a-pagination>li.a-last.a-disabled
 
 #크롤링 접속차단 해제
-headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36'}
+#headers = {'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36'}
 
 # a='マフラー'
 # b='カタカナ'
