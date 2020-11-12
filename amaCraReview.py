@@ -13,27 +13,36 @@ b='カタカナ'
 url="https://www.amazon.co.jp/s?k="+a+"&__mk_ja_JP="+b+"&ref=sr_pg_1"
 browser.get(url)
 
-liTag = browser.find_elements_by_css_selector('ul.a-pagination>li.a-selected')
+# liTag = browser.find_elements_by_css_selector('ul.a-pagination>li.a-selected')
 
-nextBtnList = browser.find_elements_by_css_selector('ul.a-pagination>li.a-last>a')
-if int(nextBtnList.len())>0:
-    nextBtnList[0].click()
-    while True:
-        browser.find_elements_by_css_selector('span.a-price-whole')
-        div_elems = browser.find_elements_by_xpath("//div[@data-asin]")
-        # if res.ok:
-        #     pageCnt+=1
-        # else:
-        #     break
+while True:
+    nextBtnList = browser.find_elements_by_css_selector('ul.a-pagination>li.a-last>a')
+    pageCnt=0
+    
+    #nextBtn이disabled이거나 10페이지이상 넘어가면 중단
+    if int(len(nextBtnList))>0 & pageCnt<10:
+        pageCnt=+1
+        nextBtnList[0].click()
+        time.sleep(5) 
+    else:
+        break
+
+
+# if int(len(nextBtnList))>0:
+#     nextBtnList[0].click()
+#     while True:
+#         browser.find_elements_by_css_selector('span.a-price-whole')
+#         div_elems = browser.find_elements_by_xpath("//div[@data-asin]")
 
 
 
-nextBtn.click()  # 클릭
+
+#nextBtn.click()  # 클릭
  
 #import time
 # time.sleep(5) # 5초 대기
 # browser.quit() # 브라우저 종료
-time.sleep(5) # 5초 대기
+#time.sleep(5) # 5초 대기
 #ul.a-pagination>li.a-last
 # ul.a-pagination>li.a-last.a-disabled
 
