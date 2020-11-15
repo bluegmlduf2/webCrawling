@@ -20,13 +20,24 @@ def movePage():
             #driver.findElements( By.id("...") ).size() != 0
             #extPageTagChk=driver.findElements(By.CSS_SELECTOR('ul.a-pagination>li.a-last>a')).size() > 0
             #nextBtnList = driver.find_elements_by_css_selector('ul.a-pagination>li.a-last>a')
+
             #nextBtn이disabled 10페이지이상 넘어가면 중단
             if len(nextPageTag.size)>0 & pageCnt<10:
-                mainNameTag = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'h5.s-line-clamp-1')))
-                priceTag = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'span.a-price-whole')))
+
+                mainNameTag=driver.find_elements_by_css_selector('h5.s-line-clamp-1') 
+                priceTag=driver.find_elements_by_css_selector('span.a-price-whole') 
+                
+                #mainNameTag = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'h5.s-line-clamp-1')))
+                #priceTag = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'span.a-price-whole')))
                 #subNameTag = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'span.a-size-base-plus a-color-base a-text-normal')))
-                print('상품명',mainNameTag.text)
-                print('가격',priceTag.text)
+                
+                #print('상품명',mainNameTag.text)
+                #print('가격',priceTag.text)
+                #data-cel-widget=search_result_2
+                for i in range(len(mainNameTag)):
+                    print('상품명',mainNameTag[i].text)
+                    print('가격',(priceTag[i+3]).text)
+
                 pageCnt=+1
                 nextPageTag.click()
             else:
