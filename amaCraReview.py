@@ -10,6 +10,7 @@ def searchCondition():
     itemName='マフラー'
     lang='カタカナ'
     url="https://www.amazon.co.jp/s?k="+itemName+"&s=review-rank&__mk_ja_JP="+lang+"&ref=sr_pg_1"
+    print(url)
     return url
 
 def movePage():
@@ -24,9 +25,18 @@ def movePage():
             #nextBtn이disabled 10페이지이상 넘어가면 중단
             if len(nextPageTag.size)>0 & pageCnt<10:
 
-                mainNameTag=driver.find_elements_by_css_selector('h5.s-line-clamp-1') 
-                priceTag=driver.find_elements_by_css_selector('span.a-price-whole') 
-                
+                #mainNameTag=driver.find_elements_by_css_selector('h5.s-line-clamp-1') 
+                #priceTag=driver.find_elements_by_css_selector('span.a-price-whole') 
+                for item in driver.find_elements_by_xpath("//div[@data-asin][@data-component-type]"):
+                    
+                    mainItemName=item.find_element(By.CSS_SELECTOR, 'h5.s-line-clamp-1')
+                    subItemName=item.find_element(By.CSS_SELECTOR, 'h2.s-line-clamp-2')
+                    reviewCntmName=item.find_element(By.CSS_SELECTOR, 'span.a-size-base')
+                    price=''
+                    if(item.find_element_by_class_name('a-price-whole').size != 0):
+                        price=item.find_element(By.CSS_SELECTOR, 'span.a-price-whole')
+                    
+                    print(mainItemName.text,'###',subItemName.text,'###',reviewCntmName.text,'###',price.text)
                 #mainNameTag = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'h5.s-line-clamp-1')))
                 #priceTag = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'span.a-price-whole')))
                 #subNameTag = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'span.a-size-base-plus a-color-base a-text-normal')))
@@ -34,9 +44,10 @@ def movePage():
                 #print('상품명',mainNameTag.text)
                 #print('가격',priceTag.text)
                 #data-cel-widget=search_result_2
-                for i in range(len(mainNameTag)):
-                    print('상품명',mainNameTag[i].text)
-                    print('가격',(priceTag[i+3]).text)
+      
+                # for i in range(len(mainNameTag)):
+                #     print('상품명',mainNameTag[i].text)
+                #     print('가격',(priceTag[i+2]).text)
 
                 pageCnt=+1
                 nextPageTag.click()
@@ -44,8 +55,8 @@ def movePage():
                 break
     except Exception as ex: # 에러 종류
         print('에러가 발생 했습니다', ex) # ex는 발생한 에러의 이름
-    finally:
-        driver.quit()
+    # finally:
+    #     driver.quit()
 
 #Main메서드(스크립트실행:__main__ // import: __모듈명__)
 if __name__ == "__main__":
