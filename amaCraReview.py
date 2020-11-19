@@ -11,7 +11,10 @@ from selenium.common.exceptions import NoSuchElementException
 def searchCondition():
     #itemName='マフラー'
     #'パソコン'
+    global selectCnt  
     itemName=input('검색어를 입력하세요..')
+    selectCnt=int(input('검색할 아이템 수를 입력하세요..'))
+
     lang='カタカナ'
     url="https://www.amazon.co.jp/s?k="+itemName+"&s=review-rank&__mk_ja_JP="+lang+"&ref=sr_pg_1"
     print('검색할 URL...',url)
@@ -30,7 +33,7 @@ def movePage():
             #nextBtn이disabled 3페이지이상 넘어가면 중단
             if lastPageTag | (pageCnt==2):
                 print('완료되었습니다.')
-                break
+                return
 
             for item in driver.find_elements_by_xpath("//div[@data-asin][@data-component-type]"):
                 itemCnt+=1
@@ -42,6 +45,10 @@ def movePage():
                 arr.append([brandName,itemName,reviewCnt,price])
                 #np.append(arr, np.array([mainItemName,subItemName,reviewCntmName,price]))
                 print(itemCnt,"번째아이템","브랜드명:",brandName,"아이템명:",itemName,"리뷰수:",reviewCnt,"가격:",price)
+                
+                if itemCnt>=selectCnt:
+                    print('완료되었습니다.')
+                    return
 
             pageCnt+=1
             nextPageTag.click()           
