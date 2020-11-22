@@ -6,53 +6,57 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-from googletrans import Translator
+from googletrans import Translator #번역
+from currency_converter import CurrencyConverter #환율
 
 def searchCondition():
     #itemName='マフラー'
     #'パソコン'
-    global selectCnt  
-    itemName=input('검색어를 입력하세요..')
-    translatedWord=translateJap(itemName)
-    selectCnt=int(input('검색할 아이템 수를 입력하세요..'))
+    global selectCnt
+
+    # translatedWord=translateJap(input('검색어를 입력하세요(please input keyword) => '))
+    # selectCnt=int(input('검색할 아이템 수를 입력하세요(please input item count) => '))
+    translatedWord=translateJap('광어')
+    selectCnt=int('80')
 
     lang='カタカナ'
     url="https://www.amazon.co.jp/s?k="+translatedWord+"&s=review-rank&__mk_ja_JP="+lang+"&ref=sr_pg_1"
-    print('검색할 URL...',url)
+    print('검색(URL) : ',url)
     return url
 
 def movePage():
     try:
         itemCnt=1
-        pageCnt=0
+        pageCnt=1
         arr = []
-        
+
         while True:
             nextPageTag = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'ul.a-pagination>li.a-last')))
             lastPageTag=checkExistElement(driver,'ul.a-pagination>li.a-disabled.a-last')[0]
             
             #nextBtn이disabled ２페이지까지 출력
-            if lastPageTag | (pageCnt==2):
-                print('완료되었습니다.')
+            if lastPageTag | (pageCnt>2):
+                print('완료되었습니다(complete)')
                 return
-
+            
             for item in driver.find_elements_by_xpath("//div[@data-asin][@data-component-type]"):
-                itemCnt+=1
                 brandName=checkExistElement(item,'h5')[0]==True and checkExistElement(item,'h5')[1].text or '없음'
                 itemName=checkExistElement(item,'h2')[0]==True and checkExistElement(item,'h2')[1].text or '없음'
                 reviewCnt=checkExistElement(item,'span.a-size-base')[0]==True and checkExistElement(item,'span.a-size-base')[1].text or '없음'
-                price=checkExistElement(item,'span.a-price-whole')[0]==True and checkExistElement(item,'span.a-price-whole')[1].text or '없음'
+                price=checkExistElement(item,'span.a-price-whole')[0]==True and convCurrency(checkExistElement(item,'span.a-price-whole')[1].text) or '0'
 
                 arr.append([brandName,itemName,reviewCnt,price])
-                #np.append(arr, np.array([mainItemName,subItemName,reviewCntmName,price]))
                 print(itemCnt,"번째아이템","브랜드명:",brandName,"아이템명:",itemName,"리뷰수:",reviewCnt,"가격:",price)
-                
-                if itemCnt>=selectCnt:
-                    print('완료되었습니다.')
+                itemCnt+=1
+
+                if itemCnt>selectCnt:
+                    print('완료되었습니다(complete)')
                     return
 
             pageCnt+=1
-            nextPageTag.click()           
+            nextPageTag.click()
+
+        return arr      
     except Exception as ex: # 에러 종류
         print('에러가 발생 했습니다', ex) # ex는 발생한 에러의 이름
     # finally:
@@ -66,14 +70,25 @@ def checkExistElement(item,selector):
     return [True,reVal]
 
 def translateJap(searchWord):
+    trans = Translator()
+
+    while True:
+        try:
+            text = trans.translate(searchWord, dest="ja").text
+            print('번역한 검색어 (translated keyword) : ',text)
+            return text
+        except Exception:
+            trans = Translator()
+
+def convCurrency(japYen):
     try:
-        trans = Translator()
-        time.sleep(0.1)
-        result=trans.translate(searchWord,dest="ja")
-        print('번역한 검색어:',result.text)
-        return result.text
-    except Exception as ex:
+        #curCov.currencies지원통화확인
+        return int(curCov.convert(japYen[1:].replace(',',''),'JPY','KRW'))
+    except Exception as ex: # 에러 종류
         print('에러가 발생 했습니다', ex) # ex는 발생한 에러의 이름
+
+# def getSortedArr(arr):
+#     return arr
 
 #Main메서드(스크립트실행:__main__ // import: __모듈명__)
 if __name__ == "__main__":
@@ -88,14 +103,22 @@ if __name__ == "__main__":
             global wait
             wait = WebDriverWait(driver , 10) #10초를 기다린다.
 
-            print('프로그램을 시작합니다.')
-            movePage()#페이지 이동
+            global curCov
+            curCov = CurrencyConverter()#통화 인스턴스 초기화
+
+            print('프로그램을 시작합니다(Start Application)')
+            movePage()
+            #arr=movePage()#페이지 이동
+            #arrSorted=getSortedArr(arr)#정렬된 리스트 가져오기
+
         except Exception as ex: # 에러 종류
             print('에러가 발생 했습니다', ex) # ex는 발생한 에러의 이름
         finally:
-            driver.quit()
+            print('프로그램 종료(Exits application)')
+            time.sleep(60)
+            #driver.quit()
+
+init()
 
 
-    # 메인함수실행
-    init()
     
