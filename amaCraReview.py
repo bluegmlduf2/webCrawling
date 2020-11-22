@@ -88,7 +88,7 @@ def convCurrency(japYen):
         print('에러가 발생 했습니다', ex) # ex는 발생한 에러의 이름
 
 def getSortedArr(arr):
-    #평가는 많고 가격은 낮은것
+    #평가는 많고 가격은 낮은것 
     #arr[itemCnt,brandName,itemName,reviewCnt,price]
     arr.sort(key = lambda x: [-x[3],x[4]])
     return arr
