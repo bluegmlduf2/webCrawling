@@ -20,7 +20,7 @@ def searchCondition():
     # selectCnt=int(input('검색할 아이템 수를 입력하세요(please input item count) => '))
     keyword='스타벅스원두'
     translatedWord=translate('ja',keyword)
-    selectCnt=int('10')
+    selectCnt=int('2')
     currency='KRW'#KRW,JPY
     language='ko'#ko,ja
 
@@ -108,33 +108,33 @@ def getSortedArr(arr):
     return arr
 
 #Main메서드(스크립트실행:__main__ // import: __모듈명__)
-if __name__ == "__main__":
-    def init():
-        try:
-            #검색어 초기설정
-            url=searchCondition()
-            
-            global driver  
-            driver = webdriver.Chrome('C:\\Users\\YOON\\Desktop\\pythonProj\\webCrawling\\python\\chromedriver.exe')#크롬 드라이버(chromedriver_path)
-            driver.get(url)#조건을 포함한 브라우저를 실행
+# if __name__ == "__main__":
+def init():
+    try:
+        #검색어 초기설정
+        url=searchCondition()
+        
+        global driver  
+        driver = webdriver.Chrome('C:\\Users\\YOON\\Desktop\\pythonProj\\webCrawling\\python\\chromedriver.exe')#크롬 드라이버(chromedriver_path)
+        driver.get(url)#조건을 포함한 브라우저를 실행
 
-            global wait
-            wait = WebDriverWait(driver , 10) #10초를 기다린다.
+        global wait
+        wait = WebDriverWait(driver , 10) #10초를 기다린다.
 
-            global curCov
-            curCov = CurrencyConverter()#통화 인스턴스 초기화
+        global curCov
+        curCov = CurrencyConverter()#통화 인스턴스 초기화
 
-            print('프로그램을 시작합니다(Start Application)')
-            arr=movePage()#페이지 이동
-            arrSorted=getSortedArr(arr)#정렬된 리스트 가져오기
-            for i in arrSorted: 
-                print(i)
-        except Exception as ex: # 에러 종류
-            print('에러가 발생 했습니다', ex) # ex는 발생한 에러의 이름
-        finally:
-            print('프로그램 종료(Exits application)')
-            #time.sleep(60)
-            driver.quit()
+        print('프로그램을 시작합니다(Start Application)')
+        arr=movePage()#페이지 이동
+        arrSorted=getSortedArr(arr)#정렬된 리스트 가져오기
+        return arrSorted[1]
+        # for i in arrSorted: 
+        #     print(i)
+    except Exception as ex: # 에러 종류
+        print('에러가 발생 했습니다', ex) # ex는 발생한 에러의 이름
+    finally:
+        print('프로그램 종료(Exits application)')
+        #time.sleep(60)
+        driver.quit()
 
 #######시작함수######################################################################3
-init()
