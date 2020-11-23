@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+    <div id='main'>
+        <div id='search'>
+            <form action="" method="post">
+                <label for="keyword">키워드(keyword)</label>
+                <input type="text" name="keyword" id="keyword">
+                <label for="itemCnt">아이템수(itemCount)</label>
+                <input type="text" name="itemCnt" id="itemCnt">
+                <label for="currency">통화(currency)</label>
+                <select name="currency" id="currency">
+                    <option value="KRW">한국(korean)</option>
+                    <option value="JPY">일본(japaness)</option>
+                </select>
+                <button type="submit">csv저장(Save Csv)</button>
+                <input type="submit" value="검색(Search)">
+            </form>
+        </div>
+        <div id='itemList'></div>
+        <div id="download"></div>
+    </div>    
+</body>
+    <script type="text/javascript" src="../js/main.js"></script> 
+</html>
