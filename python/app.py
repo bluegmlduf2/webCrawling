@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse
 import amazonReviewCnt
 
+# python -m http.server
 class MyHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         #parsed_path=urlparse(self.path)
