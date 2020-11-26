@@ -1,10 +1,18 @@
-from flask import Flask
+from flask import Flask,render_template,request
+from ama import amazon as amaModule
+
 app = Flask(__name__)
 
 @app.route('/')
-def hello_world():
-    return 'Hello World!'
+def index():
+    return render_template('index.html')
 
+@app.route('/search',methods=['POST'])
+def search():
+    amaInst=amaModule.amazon(request.form)
+    value=amaInst.run()
+    return render_template('index.html',sendData={'test1',value})    
 
-if __name__ == '__main__':
-    app.run()
+#  if __name__ == 'main':
+# if __name__ == '__main__':
+app.run(debug=True)

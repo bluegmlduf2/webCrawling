@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="data:image/x-icon" type="image/x-icon">
+    <title>WebShoppingList</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+
+<body>
+    <div id='main'>
+        <div id='search'>
+            <form action="/search" method="post">
+                <select id="siteName" name="siteName" class="searchSelectTerm">
+                    <option value="am" disabled selected hidden >검색엔진(Search engine)</option> 
+                    <option value="am">Amazon Japan</option>
+                    <option value="na">Naver</option>
+                </select>
+                <input type="text" id="keyword" name="keyword" class="searchTerm" placeholder="키워드(keyword)" value='머플러'>
+                <input type="text" id="itemCount" name="itemCount" class="searchTerm" placeholder="아이템수(itemCount)" value='100'>
+                <select id="translate" name="translate" class="searchSelectTerm">
+                    <!-- <option value="ko" disabled selected hidden >번역(translate)</option>  -->
+                    <option value="ko" selected hidden >번역(translate)</option> 
+                    <option value="ko" >한국어(korean)</option>
+                    <option value="ja">일본어(japaness)</option>
+                </select>
+                <select id="currency" name="currency" class="searchSelectTerm">
+                    <!-- <option value="KRW" disabled selected hidden >통화(currency)</option>  -->
+                    <option value="KRW" selected hidden >통화(currency)</option> 
+                    <option value="KRW">원화(￦)</option>
+                    <option value="JPY">엔화(￥)</option>
+                </select>
+                <button type="submit" class="searchButton">CSV저장(CSV)</button>
+                <button type="submit" class="searchButton">검색(Search)</button>
+            </form>
+        </div>
+        <div id='itemTable'>
+            <table class="tab">
+                <tr>
+                    <th scope="row">번호(ROWID)</th>
+                    <th scope="row">브랜드 이름(BrandName)</th>
+                    <th scope="row">아이템 이름(ItemName)</th>
+                    <th scope="row">리뷰 수(ReviewCount)</th>
+                    <th scope="row">가격(Price)</th>
+                    <th scope="row">URL</th>
+                </tr>
+                <tr>
+                    <td>내용이 들어갑니다.</td>
+                    <td>내용이 들어갑니다.</td>
+                    <td>내용이 들어갑니다.</td>
+                    <td>내용이 들어갑니다.</td>
+                    <td>내용이 들어갑니다.</td>
+                    <td>내용이 들어갑니다.</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../js/main.js"></script>
+
+</html>
