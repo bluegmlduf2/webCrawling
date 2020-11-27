@@ -14,21 +14,24 @@
         <div id='search'>
             <form action="/search" method="post">
                 <select id="siteName" name="siteName" class="searchSelectTerm">
-                    <option value="am" disabled selected hidden >검색엔진(Search engine)</option> 
+                    <option value="am" selected hidden>검색엔진(Search engine)</option>
+                    <!-- <option value="am" disabled selected hidden >검색엔진(Search engine)</option>  -->
                     <option value="am">Amazon Japan</option>
                     <option value="na">Naver</option>
                 </select>
-                <input type="text" id="keyword" name="keyword" class="searchTerm" placeholder="키워드(keyword)" value='머플러'>
-                <input type="text" id="itemCount" name="itemCount" class="searchTerm" placeholder="아이템수(itemCount)" value='10'>
+                <input type="text" id="keyword" name="keyword" class="searchTerm" placeholder="키워드(keyword)"
+                    value='머플러'>
+                <input type="text" id="itemCount" name="itemCount" class="searchTerm" placeholder="아이템수(itemCount)"
+                    value='5'>
                 <select id="translate" name="translate" class="searchSelectTerm">
                     <!-- <option value="ko" disabled selected hidden >번역(translate)</option>  -->
-                    <option value="ja" selected hidden >번역(translate)</option> 
-                    <option value="ko" >한국어(korean)</option>
+                    <option value="ja" selected hidden>번역(translate)</option>
+                    <option value="ko">한국어(korean)</option>
                     <option value="ja">일본어(japaness)</option>
                 </select>
                 <select id="currency" name="currency" class="searchSelectTerm">
                     <!-- <option value="KRW" disabled selected hidden >통화(currency)</option>  -->
-                    <option value="KRW" selected hidden >통화(currency)</option> 
+                    <option value="KRW" selected hidden>통화(currency)</option>
                     <option value="KRW">원화(￦)</option>
                     <option value="JPY">엔화(￥)</option>
                 </select>
@@ -46,18 +49,19 @@
                     <th scope="row">가격(Price)</th>
                     <th scope="row">URL</th>
                 </tr>
+                {% if sendData != None %}
                 {% for item in sendData %}
                 <tr>
-                    {% if item != None %}
                     <td>{{ item.0 }}</td>
                     <td>{{ item.1 }}</td>
                     <td>{{ item.2 }}</td>
                     <td>{{ item.3 }}</td>
-                    <td>empty</td>
-                    <td>empty</td>
-                    {% endif %}
+                    <td>{{ item.4 }}</td>
+                    <td>{{ item.5 }}</td>
+                    {% endfor %}
                 </tr>
-                {% endfor %}
+                {% endif %}
+
             </table>
         </div>
     </div>

@@ -38,7 +38,7 @@ class amazon:
 
         #keyword=input('검색어를 입력하세요(please input keyword) => ')
         # selectCnt=int(input('검색할 아이템 수를 입력하세요(please input item count) => '))
-        translatedWord=self.translate(translateParam,keyword)
+        translatedWord=self.translate('ja',keyword)
         selectCnt=int(itemCount)
         language=translateParam#ko,ja
         currency=currencyParam#KRW,JPY
@@ -70,7 +70,7 @@ class amazon:
                 for item in driver.find_elements_by_xpath("//div[@data-asin][@data-component-type]"):
                     brandName=self.checkExistElement(item,'h5')[0]==True and self.checkExistElement(item,'h5')[1].text or 'none'
                     itemName=self.checkExistElement(item,'h2')[0]==True and self.checkExistElement(item,'h2')[1].text or 'none'
-                    reviewCnt=self.checkExistElement(item,'span.a-size-base')[0]==True and int(self.checkExistElement(item,'span.a-size-base')[1].text) or 'none'
+                    reviewCnt=self.checkExistElement(item,'span.a-size-base')[0]==True and int(self.checkExistElement(item,'span.a-size-base')[1].text) or '0'
                     price=self.checkExistElement(item,'span.a-price-whole')[0]==True and self.convCurrency(self.checkExistElement(item,'span.a-price-whole')[1].text) or '0'
                     itemUrl=self.checkExistElement(item,'h2')[0]==True and parse.unquote(self.checkExistElement(item,'h2>a')[1].get_attribute("href")) or 'none'
 
@@ -132,8 +132,6 @@ class amazon:
             arr=self.movePage()#페이지 이동
             arrSorted=self.getSortedArr(arr)#정렬된 리스트 가져오기
             return arrSorted
-            # for i in arrSorted: 
-            #     print(i)
         except Exception as ex: # 에러 종류
             print('에러가 발생 했습니다', ex) # ex는 발생한 에러의 이름
         finally:
