@@ -33,15 +33,15 @@ class amazon:
         
         keyword=searchList['keyword']
         itemCount=searchList['itemCount']
-        translate=searchList['translate']
-        currency=searchList['currency']
+        translateParam=searchList['translate']
+        currencyParam=searchList['currency']
 
         #keyword=input('검색어를 입력하세요(please input keyword) => ')
         # selectCnt=int(input('검색할 아이템 수를 입력하세요(please input item count) => '))
-        translatedWord=self.translate('ja',keyword)
+        translatedWord=self.translate(translateParam,keyword)
         selectCnt=int(itemCount)
-        language=translate#ko,ja
-        currency=keyword#KRW,JPY
+        language=translateParam#ko,ja
+        currency=currencyParam#KRW,JPY
 
         searchlang='カタカナ'
         url="https://www.amazon.co.jp/s?k="+translatedWord+"&s=review-rank&__mk_ja_JP="+searchlang+"&ref=sr_pg_1"
@@ -80,7 +80,7 @@ class amazon:
                         itemName=self.translate('ko',itemName)
 
                     arr.append([itemCnt,brandName,itemName,reviewCnt,price,itemUrl])
-                    #print(itemCnt,"번째아이템","브랜드명:",brandName,"아이템명:",itemName,"리뷰수:",reviewCnt,"가격:",price)
+                    print(itemCnt,"번째아이템","브랜드명:",brandName,"아이템명:",itemName,"리뷰수:",reviewCnt,"가격:",price)
                     itemCnt+=1
 
                     if itemCnt>selectCnt:
@@ -131,7 +131,7 @@ class amazon:
             print('프로그램을 시작합니다(Start Application)')
             arr=self.movePage()#페이지 이동
             arrSorted=self.getSortedArr(arr)#정렬된 리스트 가져오기
-            return arrSorted[1]
+            return arrSorted
             # for i in arrSorted: 
             #     print(i)
         except Exception as ex: # 에러 종류

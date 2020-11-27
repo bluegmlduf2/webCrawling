@@ -19,10 +19,10 @@
                     <option value="na">Naver</option>
                 </select>
                 <input type="text" id="keyword" name="keyword" class="searchTerm" placeholder="키워드(keyword)" value='머플러'>
-                <input type="text" id="itemCount" name="itemCount" class="searchTerm" placeholder="아이템수(itemCount)" value='100'>
+                <input type="text" id="itemCount" name="itemCount" class="searchTerm" placeholder="아이템수(itemCount)" value='10'>
                 <select id="translate" name="translate" class="searchSelectTerm">
                     <!-- <option value="ko" disabled selected hidden >번역(translate)</option>  -->
-                    <option value="ko" selected hidden >번역(translate)</option> 
+                    <option value="ja" selected hidden >번역(translate)</option> 
                     <option value="ko" >한국어(korean)</option>
                     <option value="ja">일본어(japaness)</option>
                 </select>
@@ -46,14 +46,18 @@
                     <th scope="row">가격(Price)</th>
                     <th scope="row">URL</th>
                 </tr>
+                {% for item in sendData %}
                 <tr>
-                    <td>내용이 들어갑니다.</td>
-                    <td>내용이 들어갑니다.</td>
-                    <td>내용이 들어갑니다.</td>
-                    <td>내용이 들어갑니다.</td>
-                    <td>내용이 들어갑니다.</td>
-                    <td>내용이 들어갑니다.</td>
+                    {% if item != None %}
+                    <td>{{ item.0 }}</td>
+                    <td>{{ item.1 }}</td>
+                    <td>{{ item.2 }}</td>
+                    <td>{{ item.3 }}</td>
+                    <td>empty</td>
+                    <td>empty</td>
+                    {% endif %}
                 </tr>
+                {% endfor %}
             </table>
         </div>
     </div>

@@ -11,7 +11,7 @@ def index():
 def search():
     amaInst=amaModule.amazon(request.form)
     value=amaInst.run()
-    return render_template('index.html',sendData={'test1',value})    
+    return render_template('index.html',sendData=value)    
 
 #  if __name__ == 'main':
 # if __name__ == '__main__':
