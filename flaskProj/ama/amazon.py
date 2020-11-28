@@ -1,5 +1,6 @@
 import requests
 import time
+import traceback
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -15,7 +16,7 @@ class amazon:
         url=self.searchCondition(searchList)
         
         global driver  
-        driver = webdriver.Chrome('C:\\Users\\YOON\\Desktop\\pythonProj\\webCrawling\\flaskProj\\ama\\chromedriver.exe')#크롬 드라이버(chromedriver_path)
+        driver = webdriver.Chrome("C:\\Users\\YOON\\Desktop\\pythonProj\\webCrawling\\flaskProj\\ama\\chromedriver.exe")#크롬 드라이버(chromedriver_path)
         driver.get(url)#조건을 포함한 브라우저를 실행
 
         global wait
@@ -70,17 +71,17 @@ class amazon:
                 for item in driver.find_elements_by_xpath("//div[@data-asin][@data-component-type]"):
                     brandName=self.checkExistElement(item,'h5')[0]==True and self.checkExistElement(item,'h5')[1].text or 'none'
                     itemName=self.checkExistElement(item,'h2')[0]==True and self.checkExistElement(item,'h2')[1].text or 'none'
-                    reviewCnt=self.checkExistElement(item,'span.a-size-base')[0]==True and int(self.checkExistElement(item,'span.a-size-base')[1].text) or '0'
-                    price=self.checkExistElement(item,'span.a-price-whole')[0]==True and self.convCurrency(self.checkExistElement(item,'span.a-price-whole')[1].text) or '0'
+                    reviewCnt=self.checkExistElement(item,'span.a-size-base')[0]==True and int(self.checkExistElement(item,'span.a-size-base')[1].text.replace(',','')) or 0
+                    price=self.checkExistElement(item,'span.a-price-whole')[0]==True and self.convCurrency(self.checkExistElement(item,'span.a-price-whole')[1].text) or 0
                     itemUrl=self.checkExistElement(item,'h2')[0]==True and parse.unquote(self.checkExistElement(item,'h2>a')[1].get_attribute("href")) or 'none'
 
                     #transfer to kor
                     if language=='ko':
                         brandName=self.translate('ko',brandName)
                         itemName=self.translate('ko',itemName)
-
+                
                     arr.append([itemCnt,brandName,itemName,reviewCnt,price,itemUrl])
-                    print(itemCnt,"번째아이템","브랜드명:",brandName,"아이템명:",itemName,"리뷰수:",reviewCnt,"가격:",price)
+                    #print(itemCnt,"번째아이템","브랜드명:",brandName,"아이템명:",itemName,"리뷰수:",reviewCnt,"가격:",price)
                     itemCnt+=1
 
                     if itemCnt>selectCnt:
@@ -123,7 +124,7 @@ class amazon:
     def getSortedArr(self,arr):
         #평가는 많고 가격은 낮은것 
         #arr[itemCnt,brandName,itemName,reviewCnt,price]
-        arr.sort(key = lambda x: [-x[3],x[4]])
+        arr.sort(key = lambda x: [int(-x[3])])
         return arr
 
     def run(self):
@@ -133,7 +134,10 @@ class amazon:
             arrSorted=self.getSortedArr(arr)#정렬된 리스트 가져오기
             return arrSorted
         except Exception as ex: # 에러 종류
+            print(traceback.print_stack())
+            print(traceback.print_exc())
             print('에러가 발생 했습니다', ex) # ex는 발생한 에러의 이름
+            print('에러가 발생 했습니다', ex.__traceback__) # ex는 발생한 에러의 이름
         finally:
             print('프로그램 종료(Exits application)')
             #time.sleep(60)
