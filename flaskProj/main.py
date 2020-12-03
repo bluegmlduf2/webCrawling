@@ -13,7 +13,7 @@ def search():
     '''검색페이지'''
     amaInst=amaModule.Amazon(request.form)
     value=amaInst.run()
-    return render_template('index.html',sendData=value)    
+    return render_template('index.html',sendData=value,optionData=request.form)    
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -12,25 +12,25 @@
 <body>
     <div id='main'>
         <div id='search'>
-            <form action="/search" method="post">
-                <select id="siteName" name="siteName" class="searchSelectTerm">
+            <form action="/search" method="post" onsubmit="return checkForm(this)">
+                <select id="siteNameId" name="siteName" class="searchSelectTerm">
                     <option value="" selected hidden>검색엔진(Search engine)</option>
                     <!-- <option value="am" disabled selected hidden >검색엔진(Search engine)</option>  -->
                     <option value="am">Amazon Japan</option>
                     <option value="na">Naver</option>
                 </select>
-                <input type="text" id="keyword" name="keyword" class="searchTerm" placeholder="키워드(keyword)"
+                <input type="text" id="keywordId" name="keyword" class="searchTerm" placeholder="키워드(keyword)"
                     value=''>
-                <input type="text" id="itemCount" name="itemCount" class="searchTerm" placeholder="아이템수(itemCount)"
+                <input type="text" id="itemCountId" name="itemCount" class="searchTerm" placeholder="아이템수(itemCount)"
                     value=''>
-                <select id="translate" name="translate" class="searchSelectTerm">
+                <select id="translateId" name="translate" class="searchSelectTerm">
                     <!-- <option value="ko" disabled selected hidden >번역(translate)</option>  -->
                     <option value="" selected hidden>번역(translate)</option>
                     <option value="ko">한국어(korean)</option>
                     <option value="ja">일본어(japaness)</option>
                     <option value="zh-cn">중국어(chinese)</option>
                 </select>
-                <select id="currency" name="currency" class="searchSelectTerm">
+                <select id="currencyId" name="currency" class="searchSelectTerm">
                     <!-- <option value="KRW" disabled selected hidden >통화(currency)</option>  -->
                     <option value="" selected hidden>통화(currency)</option>
                     <option value="KRW">원화(￦)</option>
@@ -68,6 +68,5 @@
         </div>
     </div>
 </body>
-<script type="text/javascript" src="../js/main.js"></script>
-
+<script type="text/javascript" src="{{ url_for('static', filename='/js/main.js') }}"></script>
 </html>
