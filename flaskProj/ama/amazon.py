@@ -74,14 +74,15 @@ class Amazon:
                     itemName=self.checkExistElement(item,'h2')[0]==True and self.checkExistElement(item,'h2')[1].text or 'none'
                     reviewCnt=self.checkExistElement(item,'span.a-size-base')[0]==True and int(self.checkExistElement(item,'span.a-size-base')[1].text.replace(',','')) or 0
                     price=self.checkExistElement(item,'span.a-price-whole')[0]==True and self.convCurrency(self.checkExistElement(item,'span.a-price-whole')[1].text) or 0
-                    itemUrl=self.checkExistElement(item,'h2')[0]==True and parse.unquote(self.checkExistElement(item,'h2>a')[1].get_attribute("href")) or 'none'
+                    itemUrl=self.checkExistElement(item,'h2')[0]==True and parse.unquote(self.checkExistElement(item,'h2>a')[1].get_attribute("href")) or 'none' #unquote->%urlDecode
+                    imageSrc=self.checkExistElement(item,'img')[0]==True and self.checkExistElement(item,'img')[1].get_attribute("src") or ''
 
                     #translate
                     if language != 'ja':
                         brandName=self.translate(language,brandName)
                         itemName=self.translate(language,itemName)
                 
-                    arr.append([itemCnt,brandName,itemName,reviewCnt,price,itemUrl])
+                    arr.append([itemCnt,brandName,itemName,reviewCnt,price,itemUrl,imageSrc])
                     #print(itemCnt,"번째아이템","브랜드명:",brandName,"아이템명:",itemName,"리뷰수:",reviewCnt,"가격:",price)
                     itemCnt+=1
 
@@ -129,9 +130,9 @@ class Amazon:
 
     def getSortedArr(self,arr):
         '''평가순 정렬함수'''
-        #arr[itemCnt,brandName,itemName,reviewCnt,price]
+        #arr[itemCnt,brandName,itemName,reviewCnt,price,url,imageSrc]
         #sort(key=value) value => int(x) 
-        arr.sort(key = lambda x: [int(-x[3])])
+        arr.sort(key = lambda x: [int(-x[4])])
         return arr
 
     def run(self):
