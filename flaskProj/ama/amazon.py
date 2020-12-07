@@ -1,14 +1,19 @@
+import os
+print('33333333333333333333333333333')
+print(os.getcwd() )
 import requests
 import time
 import traceback
+import google
+import papago
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-from googletrans import Translator #번역
 from currency_converter import CurrencyConverter #환율
 from urllib import parse #url 디코딩용
+
 
 class Amazon:
     def __init__(self,searchList):
@@ -31,15 +36,21 @@ class Amazon:
         global currency
         global language
         global trans
-        trans = Translator(service_urls=['translate.googleapis.com'])
-        
+
+        #번역기 선택
+        if searchList['siteName']=='gl':
+            trans=google.Google()
+        else:
+            trans=papago.Papago()
+
         #검색조건
         keyword=searchList['keyword']
         itemCount=searchList['itemCount']
         translateParam=searchList['translate']
         currencyParam=searchList['currency']
 
-        translatedWord=self.translate('ja',keyword)
+        #검색조건
+        translatedWord=trans.translate('ja',keyword)
         selectCnt=int(itemCount)
         language=translateParam#ko,ja,zh-cn
         currency=currencyParam#KRW,JPY,CNY
@@ -79,8 +90,8 @@ class Amazon:
 
                     #translate
                     if language != 'ja':
-                        brandName=self.translate(language,brandName)
-                        itemName=self.translate(language,itemName)
+                        brandName=trans.translate(language,brandName)
+                        itemName=trans.translate(language,itemName)
                 
                     arr.append([itemCnt,brandName,itemName,reviewCnt,price,itemUrl,imageSrc])
                     #print(itemCnt,"번째아이템","브랜드명:",brandName,"아이템명:",itemName,"리뷰수:",reviewCnt,"가격:",price)
@@ -103,17 +114,7 @@ class Amazon:
             return [False]
         return [True,reVal]
 
-    def translate(self,lang,searchWord):
-        '''번역함수'''
-        global trans
 
-        while True:
-            try:
-                text = trans.translate(searchWord, dest=lang).text
-                #print('번역한 검색어 (translated keyword) : ',text)
-                return text
-            except Exception:
-                trans = Translator(service_urls=['translate.googleapis.com'])
 
     def convCurrency(self,japYen):
         '''환율검색함수'''
@@ -132,7 +133,7 @@ class Amazon:
         '''평가순 정렬함수'''
         #arr[itemCnt,brandName,itemName,reviewCnt,price,url,imageSrc]
         #sort(key=value) value => int(x) 
-        arr.sort(key = lambda x: [int(-x[4])])
+        arr.sort(key = lambda x: [int(-x[3])])
         return arr
 
     def run(self):

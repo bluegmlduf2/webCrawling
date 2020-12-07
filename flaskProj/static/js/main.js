@@ -4,18 +4,12 @@
 document.addEventListener("DOMContentLoaded",function(){
 
     if(typeof searchedVal !== 'undefined'){
-        document.querySelector("#siteNameId").value=searchedVal.siteName
-        document.querySelector("#keywordId").value=searchedVal.keyword
-        document.querySelector("#itemCountId").value=searchedVal.itemCount
-        document.querySelector("#translateId").value=searchedVal.translate
-        document.querySelector("#currencyId").value=searchedVal.currency
+        this.querySelector("#siteNameId").value=searchedVal.siteName
+        this.querySelector("#keywordId").value=searchedVal.keyword
+        this.querySelector("#itemCountId").value=searchedVal.itemCount
+        this.querySelector("#translateId").value=searchedVal.translate
+        this.querySelector("#currencyId").value=searchedVal.currency
     }
-   
-    this.querySelector("#siteNameId > option:nth-child(2)").setAttribute('selected','')
-    this.querySelector("#keywordId").value='머리띠'
-    this.querySelector("#itemCountId").value='5'
-    this.querySelector("#translateId > option:nth-child(2)").setAttribute('selected','')
-    this.querySelector("#currencyId > option:nth-child(2)").setAttribute('selected','')
 })
 
 function checkForm(formTag) {
