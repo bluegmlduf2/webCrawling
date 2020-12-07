@@ -14,7 +14,6 @@ def search():
     amaInst=amaModule.Amazon(request.form)
     value=amaInst.run()
     return render_template('index.html',sendData=value,optionData=request.form)
-    #return render_template('index.html',sendData=None,optionData=request.form)    
 
 if __name__ == '__main__':
     app.run(debug=True)

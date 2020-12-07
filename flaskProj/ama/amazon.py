@@ -1,11 +1,9 @@
 import os
-print('33333333333333333333333333333')
-print(os.getcwd() )
 import requests
 import time
 import traceback
-import google
-import papago
+from ama import google#디버깅탐색기의 FLASK_APP가 시작위치
+from ama import papago
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -21,7 +19,7 @@ class Amazon:
         url=self.searchCondition(searchList)
         
         global driver  
-        driver = webdriver.Chrome("C:\\Users\\YOON\\Desktop\\pythonProj\\webCrawling\\flaskProj\\ama\\chromedriver.exe")#크롬 드라이버(chromedriver_path)
+        driver = webdriver.Chrome(os.getcwd()+"\\flaskProj\\ama\\chromedriver.exe")#크롬 드라이버(chromedriver_path)
         driver.get(url)#조건을 포함한 브라우저를 실행
 
         global wait

@@ -39,10 +39,8 @@ class Papago:
 
         if(rescode == 200):
             response_body = response.read()
-            print(response_body.decode('utf-8'))
             #return jsonObj_reVal=json.loads(response_body.decode('utf-8'))['langCode']
             message_reVal=json.loads(response_body.decode('utf-8'))['message']['result']['translatedText']
-            print(message_reVal)
             return message_reVal
         else:
             print("Error Code:" + rescode)
@@ -63,7 +61,6 @@ class Papago:
         rescode = response.getcode()
         if(rescode==200):
             response_body = response.read()
-            print(response_body.decode('utf-8'))
             jsonObj_reVal=json.loads(response_body.decode('utf-8'))['langCode']
             return jsonObj_reVal
         else:
