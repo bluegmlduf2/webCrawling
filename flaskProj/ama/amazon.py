@@ -47,10 +47,13 @@ class Amazon:
         translateParam=searchList['translate']
         currencyParam=searchList['currency']
 
+        #중국어간체_naver
+        translateParam=(translateParam=='zh-cn' and searchList['siteName']=='na') ==True and 'zh-CN' or translateParam
+        
         #검색조건
         translatedWord=trans.translate('ja',keyword)
         selectCnt=int(itemCount)
-        language=translateParam#ko,ja,zh-cn
+        language=translateParam#ko,ja,zh-CN
         currency=currencyParam#KRW,JPY,CNY
 
         searchlang='カタカナ'

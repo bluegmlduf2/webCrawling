@@ -26,5 +26,6 @@ function checkForm(formTag) {
         alert('please check empty box');
         return false;
     }
+    
     return true
 }

@@ -49,7 +49,7 @@ class Papago:
         '''언어감지
         1. ko: 한국어
         2. ja: 일본어
-        3. zh-cn: 중국어 간체
+        3. zh-CN: 중국어 간체
         '''
         encQuery = urllib.parse.quote(searchWord)
         data = "query=" + encQuery
