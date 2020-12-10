@@ -1,8 +1,7 @@
 import os
 import requests
 import time
-import traceback
-from ama import google#디버깅탐색기의 FLASK_APP가 시작위치
+from ama import google #디버깅탐색기의 FLASK_APP가 시작위치
 from ama import papago
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -11,7 +10,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from currency_converter import CurrencyConverter #환율
 from urllib import parse #url 디코딩용
-
 
 class Amazon:
     def __init__(self,searchList):
@@ -67,45 +65,42 @@ class Amazon:
 
     def movePage(self):
         '''페이지 이동 함수'''
-        try:
-            itemCnt=1
-            pageCnt=1
-            arr = []
+        itemCnt=1
+        pageCnt=1
+        arr = []
+        
+        while True:
+            nextPageTag = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'ul.a-pagination>li.a-last')))
+            lastPageTag=self.checkExistElement(driver,'ul.a-pagination>li.a-disabled.a-last')[0]
+            
+            #nextBtn이disabled ２페이지까지 출력
+            if lastPageTag | (pageCnt>2):
+                print('검색이 완료되었습니다(searching complete)')
+                return arr
+            
+            for item in driver.find_elements_by_xpath("//div[@data-asin][@data-component-type]"):
+                brandName=self.checkExistElement(item,'h5')[0]==True and self.checkExistElement(item,'h5')[1].text or 'none'
+                itemName=self.checkExistElement(item,'h2')[0]==True and self.checkExistElement(item,'h2')[1].text or 'none'
+                reviewCnt=self.checkExistElement(item,'span.a-size-base')[0]==True and int(self.checkExistElement(item,'span.a-size-base')[1].text.replace(',','')) or 0
+                price=self.checkExistElement(item,'span.a-price-whole')[0]==True and self.convCurrency(self.checkExistElement(item,'span.a-price-whole')[1].text) or 0
+                itemUrl=self.checkExistElement(item,'h2')[0]==True and parse.unquote(self.checkExistElement(item,'h2>a')[1].get_attribute("href")) or 'none' #unquote->%urlDecode
+                imageSrc=self.checkExistElement(item,'img')[0]==True and self.checkExistElement(item,'img')[1].get_attribute("src") or ''
 
-            while True:
-                nextPageTag = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'ul.a-pagination>li.a-last')))
-                lastPageTag=self.checkExistElement(driver,'ul.a-pagination>li.a-disabled.a-last')[0]
-                
-                #nextBtn이disabled ２페이지까지 출력
-                if lastPageTag | (pageCnt>2):
+                #translate
+                if language != 'ja':
+                    brandName=trans.translate(language,brandName)
+                    itemName=trans.translate(language,itemName)
+            
+                arr.append([itemCnt,brandName,itemName,reviewCnt,price,itemUrl,imageSrc])
+                #print(itemCnt,"번째아이템","브랜드명:",brandName,"아이템명:",itemName,"리뷰수:",reviewCnt,"가격:",price)
+                itemCnt+=1
+
+                if itemCnt>selectCnt:
                     print('검색이 완료되었습니다(searching complete)')
                     return arr
-                
-                for item in driver.find_elements_by_xpath("//div[@data-asin][@data-component-type]"):
-                    brandName=self.checkExistElement(item,'h5')[0]==True and self.checkExistElement(item,'h5')[1].text or 'none'
-                    itemName=self.checkExistElement(item,'h2')[0]==True and self.checkExistElement(item,'h2')[1].text or 'none'
-                    reviewCnt=self.checkExistElement(item,'span.a-size-base')[0]==True and int(self.checkExistElement(item,'span.a-size-base')[1].text.replace(',','')) or 0
-                    price=self.checkExistElement(item,'span.a-price-whole')[0]==True and self.convCurrency(self.checkExistElement(item,'span.a-price-whole')[1].text) or 0
-                    itemUrl=self.checkExistElement(item,'h2')[0]==True and parse.unquote(self.checkExistElement(item,'h2>a')[1].get_attribute("href")) or 'none' #unquote->%urlDecode
-                    imageSrc=self.checkExistElement(item,'img')[0]==True and self.checkExistElement(item,'img')[1].get_attribute("src") or ''
 
-                    #translate
-                    if language != 'ja':
-                        brandName=trans.translate(language,brandName)
-                        itemName=trans.translate(language,itemName)
-                
-                    arr.append([itemCnt,brandName,itemName,reviewCnt,price,itemUrl,imageSrc])
-                    #print(itemCnt,"번째아이템","브랜드명:",brandName,"아이템명:",itemName,"리뷰수:",reviewCnt,"가격:",price)
-                    itemCnt+=1
-
-                    if itemCnt>selectCnt:
-                        print('검색이 완료되었습니다(searching complete)')
-                        return arr
-
-                pageCnt+=1
-                nextPageTag.click()
-        except Exception as ex: # 에러 종류
-            print('에러가 발생 했습니다', ex) # ex는 발생한 에러의 이름
+            pageCnt+=1
+            nextPageTag.click()
 
     def checkExistElement(self,item,selector):
         '''널 체크 함수'''
@@ -113,22 +108,18 @@ class Amazon:
             reVal=item.find_element(By.CSS_SELECTOR, selector)
         except NoSuchElementException:
             return [False]
-        return [True,reVal]
-
-
+        else:
+            return [True,reVal]
 
     def convCurrency(self,japYen):
         '''환율검색함수'''
-        try:
-            reVal=japYen
-            #curCov.currencies지원통화확인
-            if currency=='KRW':
-                reVal='￦'+ format(int(curCov.convert(japYen[1:].replace(',',''),'JPY','KRW')), ',')
-            if currency=='CNY':
-                reVal='¥'+ format(int(curCov.convert(japYen[1:].replace(',',''),'JPY','CNY')), ',')#format(i,',') 3글자포맷
-            return reVal
-        except Exception as ex: # 에러 종류
-            print('에러가 발생 했습니다', ex) # ex는 발생한 에러의 이름
+        reVal=japYen
+        #curCov.currencies지원통화확인
+        if currency=='KRW':
+            reVal='￦'+ format(int(curCov.convert(japYen[1:].replace(',',''),'JPY','KRW')), ',')
+        if currency=='CNY':
+            reVal='¥'+ format(int(curCov.convert(japYen[1:].replace(',',''),'JPY','CNY')), ',')#format(i,',') 3글자포맷
+        return reVal
 
     def getSortedArr(self,arr):
         '''평가순 정렬함수'''
@@ -143,14 +134,11 @@ class Amazon:
             print('프로그램을 시작합니다(Start Application)')
             arr=self.movePage()#페이지 이동
             arrSorted=self.getSortedArr(arr)#정렬된 리스트 가져오기
+        except Exception as ex:
+            raise #throw : 앞서 일어난 에러를 다시 던진다 
+        else:
             return arrSorted
-        except Exception as ex: # 에러 종류
-            print(traceback.print_stack())
-            print(traceback.print_exc())
-            print('에러가 발생 했습니다', ex) # ex는 발생한 에러의 이름
-            print('에러가 발생 했습니다', ex.__traceback__) # ex는 발생한 에러의 이름
         finally:
-            print('프로그램 종료(Exits application)')
-            #time.sleep(60)
             driver.quit()
+            
 
