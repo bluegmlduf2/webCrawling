@@ -1,5 +1,6 @@
 from flask import Flask,render_template,request
 from ama import amazon as amaModule
+from ama import csvParser as parseModule
 import traceback
 
 app = Flask(__name__)
@@ -30,7 +31,24 @@ def search():
         return render_template('index.html',sendData=value,optionData=request.form)
     finally:
         print('프로그램 종료(Exits application)')
-            
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route('/parseCsv',methods=['POST'])
+def parseCsv():
+    try:
+        print(request.form)
+        parseModule.csvParser(request.form)
+    except Exception as ex: 
+        #sys.exc_info()
+        print(traceback.print_exc())
+        return render_template('error_404.html')
+    else:
+        return render_template('index.html')
+    finally:
+        print('프로그램 종료(Exits application)')
+
+
+#if __name__ == '__main__':
+    #app.run(debug=True)
+
+#if __name__ == '__main__':
+app.run(debug=True)

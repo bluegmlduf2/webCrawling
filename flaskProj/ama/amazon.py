@@ -7,7 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException,TimeoutException
 from currency_converter import CurrencyConverter #환율
 from urllib import parse #url 디코딩용
 
@@ -45,7 +45,7 @@ class Amazon:
         translateParam=searchList['translate']
         currencyParam=searchList['currency']
 
-        #중국어간체_naver
+        #중국어간체_naver #삼한연산자_조건2개
         translateParam=(translateParam=='zh-cn' and searchList['siteName']=='na') ==True and 'zh-CN' or translateParam
         
         #검색조건
@@ -79,19 +79,28 @@ class Amazon:
                 return arr
             
             for item in driver.find_elements_by_xpath("//div[@data-asin][@data-component-type]"):
-                brandName=self.checkExistElement(item,'h5')[0]==True and self.checkExistElement(item,'h5')[1].text or 'none'
-                itemName=self.checkExistElement(item,'h2')[0]==True and self.checkExistElement(item,'h2')[1].text or 'none'
-                reviewCnt=self.checkExistElement(item,'span.a-size-base')[0]==True and int(self.checkExistElement(item,'span.a-size-base')[1].text.replace(',','')) or 0
-                price=self.checkExistElement(item,'span.a-price-whole')[0]==True and self.convCurrency(self.checkExistElement(item,'span.a-price-whole')[1].text) or 0
-                itemUrl=self.checkExistElement(item,'h2')[0]==True and parse.unquote(self.checkExistElement(item,'h2>a')[1].get_attribute("href")) or 'none' #unquote->%urlDecode
-                imageSrc=self.checkExistElement(item,'img')[0]==True and self.checkExistElement(item,'img')[1].get_attribute("src") or ''
+                #TAG
+                brandName_tag=self.checkExistElement(item,'h5')
+                itemName_tag=self.checkExistElement(item,'h2')
+                reviewCnt_tag=self.checkExistElement(item,'span.a-size-base')
+                price_tag=self.checkExistElement(item,'span.a-price-whole')
+                itemUrl_tag=self.checkExistElement(item,'h2>a')
+                image_tag=self.checkExistElement(item,'img')
+
+                #VALUE
+                brandName_val=brandName_tag[0]==True and brandName_tag[1].text or 'none'
+                itemName_val=itemName_tag[0]==True and itemName_tag[1].text or 'none'
+                reviewCnt_val=(reviewCnt_tag[0]==True and reviewCnt_tag[1].text.isdigit()==True) and int(reviewCnt_tag[1].text.replace(',','')) or 0 #isdigit() 문자열에 숫자포함하는지
+                price_val=price_tag[0]==True and self.convCurrency(price_tag[1].text) or 0
+                itemUrl_val=itemName_tag[0]==True and parse.unquote(itemUrl_tag[1].get_attribute("href")) or 'none' #unquote->%urlDecode
+                imageSrc_val=image_tag[0]==True and image_tag[1].get_attribute("src") or ''
 
                 #translate
                 if language != 'ja':
-                    brandName=trans.translate(language,brandName)
-                    itemName=trans.translate(language,itemName)
+                    brandName_val=trans.translate(language,brandName_val)
+                    itemName_val=trans.translate(language,itemName_val)
             
-                arr.append([itemCnt,brandName,itemName,reviewCnt,price,itemUrl,imageSrc])
+                arr.append([itemCnt,brandName_val,itemName_val,reviewCnt_val,price_val,itemUrl_val,imageSrc_val])
                 #print(itemCnt,"번째아이템","브랜드명:",brandName,"아이템명:",itemName,"리뷰수:",reviewCnt,"가격:",price)
                 itemCnt+=1
 
@@ -134,11 +143,17 @@ class Amazon:
             print('프로그램을 시작합니다(Start Application)')
             arr=self.movePage()#페이지 이동
             arrSorted=self.getSortedArr(arr)#정렬된 리스트 가져오기
+
+        except TimeoutException:
+            raise
+            print("wait timeout..")
         except Exception as ex:
             raise #throw : 앞서 일어난 에러를 다시 던진다 
         else:
             return arrSorted
         finally:
+            driver.close()
             driver.quit()
+            
             
 

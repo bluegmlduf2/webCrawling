@@ -29,3 +29,21 @@ function checkForm(formTag) {
     
     return true
 }
+
+function csvParser(data) {
+    //AJAX 
+    var xhr = new XMLHttpRequest(); 
+
+    //콜백함수
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {//4:통신상태_완료
+        if (xhr.status === 200) {//200:통신결과_성공
+          alert('Succeed Parsing to CSV')
+        }
+      }
+    };
+
+    xhr.open("POST", "/parseCsv", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(JSON.stringify(data));
+}
