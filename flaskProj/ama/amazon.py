@@ -108,8 +108,14 @@ class Amazon:
                     return arr
 
             pageCnt+=1
-            nextPageTag = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'ul.a-pagination>li.a-last')))
-            nextPageTag.click()
+            
+            # 1페이지 미만일 경우에 종료
+            try:
+                nextPageTag = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'ul.a-pagination>li.a-last')))
+            except TimeoutException:
+                return arr
+            else:
+                nextPageTag.click()
 
     def checkExistElement(self,item,selector):
         '''널 체크 함수'''

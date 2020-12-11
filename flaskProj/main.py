@@ -40,6 +40,8 @@ def parseCsv():
     except Exception as ex: 
         #sys.exc_info()
         print(traceback.print_exc())
+    else:
+        return "Success"
     finally:
         print('프로그램 종료(Exits application)')
 
