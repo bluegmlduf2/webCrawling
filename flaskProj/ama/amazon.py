@@ -21,7 +21,7 @@ class Amazon:
         driver.get(url)#조건을 포함한 브라우저를 실행
 
         global wait
-        wait = WebDriverWait(driver , 10) #10초를 기다린다.
+        wait = WebDriverWait(driver , 5) #5초를 기다린다.
 
         global curCov
         curCov = CurrencyConverter()#통화 인스턴스 초기화
@@ -70,7 +70,6 @@ class Amazon:
         arr = []
         
         while True:
-            nextPageTag = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'ul.a-pagination>li.a-last')))
             lastPageTag=self.checkExistElement(driver,'ul.a-pagination>li.a-disabled.a-last')[0]
             
             #nextBtn이disabled ２페이지까지 출력
@@ -109,6 +108,7 @@ class Amazon:
                     return arr
 
             pageCnt+=1
+            nextPageTag = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'ul.a-pagination>li.a-last')))
             nextPageTag.click()
 
     def checkExistElement(self,item,selector):

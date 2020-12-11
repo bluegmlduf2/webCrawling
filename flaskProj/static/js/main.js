@@ -37,8 +37,10 @@ function csvParser(data) {
     //콜백함수
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4) {//4:통신상태_완료
-        if (xhr.status === 200) {//200:통신결과_성공
+        if (xhr.status === 200||xhr.status === 302) {//200:통신결과_성공//302:리소스재활용
           alert('Succeed Parsing to CSV')
+        }else{
+          alert("Sorry Parsing did't work")
         }
       }
     };
