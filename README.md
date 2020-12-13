@@ -1,9 +1,9 @@
 ## About Program 
--This web system translates Amazon shopping sites (https://www.amazon.co.jp/)
--It Sort search results by reviewCount
--It has Korean, Japanese and Chinese translation functions
--It Shows the exchange rate for each product
--It Convert search results to csv file
+* This web system translates Amazon shopping sites (https://www.amazon.co.jp/)
+* It Sort search results by reviewCount
+* It has Korean, Japanese and Chinese translation functions
+* It Shows the exchange rate for each product
+* It Convert search results to csv file
 
 ### Client 
 frontend technologies used in this project:
