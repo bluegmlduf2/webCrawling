@@ -25,5 +25,5 @@ backend technologies used in this project:
 - Pandas (Csv parser)
 
 #### if you want to see more click this link 
-https://www.youtube.com/watch?v=El-c6AriEmA&feature=youtu.be
+https://youtu.be/Nv8W6R9BvLs
 
