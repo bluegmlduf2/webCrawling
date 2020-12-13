@@ -25,9 +25,12 @@ class Papago:
         global client_secret_check
         client_secret_check = key['check']['client_secret_check']
 
-    def translate(self,targetLang,searchWord):
+    def translate(self,targetLang,searchWord,title=False):
         '''번역기능'''
         srcLang=self.checkLang(searchWord)
+        if (srcLang=="ja" and title) or (targetLang=="ja" and not title):
+            return searchWord
+
         encText = urllib.parse.quote(searchWord)
         data = "source="+srcLang+"&target="+targetLang+"&text=" + encText
         url = "https://openapi.naver.com/v1/papago/n2mt"

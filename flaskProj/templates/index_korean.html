@@ -14,39 +14,39 @@
         <div id='search'>
             <form action="/search" method="post" onsubmit="return checkForm(this)">
                 <select id="siteNameId" name="siteName" class="searchSelectTerm">
-                    <option value="" selected hidden>translate engine</option>
-                    <option value="gl">Google Translator</option>
-                    <option value="na">Naver Papago</option>
+                    <option value="" selected hidden>번역기(translate engine)</option>
+                    <option value="gl">Google</option>
+                    <option value="na">Naver</option>
                 </select>
-                <input type="text" id="keywordId" name="keyword" class="searchTerm" placeholder="keyword"
+                <input type="text" id="keywordId" name="keyword" class="searchTerm" placeholder="키워드(keyword)"
                     value=''>
-                <input type="text" id="itemCountId" name="itemCount" class="searchTerm" placeholder="itemCount"
+                <input type="text" id="itemCountId" name="itemCount" class="searchTerm" placeholder="아이템수(itemCount)"
                     value=''>
                 <select id="translateId" name="translate" class="searchSelectTerm">
-                    <option value="" selected hidden>translate language</option>
-                    <option value="ko">korean</option>
-                    <option value="ja">japaness</option>
-                    <option value="zh-cn">chinese</option>
+                    <option value="" selected hidden>번역(translate)</option>
+                    <option value="ko">한국어(korean)</option>
+                    <option value="ja">일본어(japaness)</option>
+                    <option value="zh-cn">중국어(chinese)</option>
                 </select>
                 <select id="currencyId" name="currency" class="searchSelectTerm">
-                    <option value="" selected hidden>currency</option>
-                    <option value="KRW">korea(￦)</option>
-                    <option value="JPY">japan(￥)</option>
-                    <option value="CNY">china(￥)</option>
+                    <option value="" selected hidden>통화(currency)</option>
+                    <option value="KRW">원화(￦)</option>
+                    <option value="JPY">엔화(￥)</option>
+                    <option value="CNY">위안(￥)</option>
                 </select>
-                <button type="button" onclick="csvParser({{sendData}})" class="searchButton">CSV SAVE</button>
-                <button type="submit" class="searchButton">SEARCH</button>
+                <button type="button" onclick="csvParser({{sendData}})" class="searchButton">CSV저장(CSV)</button>
+                <button type="submit" class="searchButton">검색(Search)</button>
             </form>
         </div>
         <div id='itemTable'>
             <table class="tab">
                 <tr>
-                    <th scope="row">ROWID</th>
-                    <th scope="row">Image</th>
-                    <th scope="row">BrandName</th>
-                    <th scope="row">ItemName</th>
-                    <th scope="row">ReviewCount</th>
-                    <th scope="row">Price</th>
+                    <th scope="row">번호(ROWID)</th>
+                    <th scope="row">이미지(Image)</th>
+                    <th scope="row">브랜드 이름(BrandName)</th>
+                    <th scope="row">아이템 이름(ItemName)</th>
+                    <th scope="row">리뷰 수(ReviewCount)</th>
+                    <th scope="row">가격(Price)</th>
                     <th scope="row">URL</th>
                 </tr>
                 {% if sendData != None %}
