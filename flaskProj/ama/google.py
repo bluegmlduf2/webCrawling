@@ -4,7 +4,7 @@ class Google:
     def __init__(self):
         pass
 
-    def translate(self,lang,searchWord):
+    def translate(self,lang,searchWord,title=False):
         '''번역함수'''
         trans = Translator(service_urls=['translate.googleapis.com'])
         text = trans.translate(searchWord, dest=lang).text
