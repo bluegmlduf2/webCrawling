@@ -24,7 +24,7 @@ function checkForm(formTag) {
         !formTag.translate.value ||
         !formTag.currency.value) {
         alert('please check empty box');
-        return false;
+        return false; //return false => preventDefault() , stopPropagation()
     }
     
     return true
